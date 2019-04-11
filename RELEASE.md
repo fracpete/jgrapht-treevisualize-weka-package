@@ -7,16 +7,16 @@ Preparation
 * Change the artifact ID in `pom.xml` to today's date, e.g.:
 
   ```
-2019.5.13-SNAPSHOT
+2019.4.11-SNAPSHOT
   ```
 
 * Update the version, date and URL in `Description.props` to reflect new
   version, e.g.:
 
   ```
-  Version=2019.5.13
-  Date=2019-05-13
-  PackageURL=https://github.com/fracpete/jgrapht-treevisualize-weka-package/releases/download/v2019.5.13/jgrapht-treevisualize-2019.5.13.zip
+  Version=2019.4.11
+  Date=2019-04-11
+  PackageURL=https://github.com/fracpete/jgrapht-treevisualize-weka-package/releases/download/v2019.4.11/jgrapht-treevisualize-2019.4.11.zip
   ```
 
 Weka package
@@ -24,13 +24,13 @@ Weka package
 
 * Commit/push all changes
 
-* Run the following command to generate the package archive for version `2019.5.13`:
+* Run the following command to generate the package archive for version `2019.4.11`:
 
   ```
-  ant -f build_package.xml -Dpackage=graphviz-treevisualize-2019.5.13 clean make_package
+  ant -f build_package.xml -Dpackage=graphviz-treevisualize-2019.4.11 clean make_package
   ```
 
-* Create a release tag on github (v2019.5.13)
+* Create a release tag on github (v2019.4.11)
 * add release notes
 * upload package archive from `dist`
 

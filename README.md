@@ -9,7 +9,7 @@ this plugin does not rely on external tools.
 
 ## Releases
 
-* TODO
+* [2019.4.11](https://github.com/fracpete/jgrapht-treevisualize-weka-package/releases/download/v2019.4.11/jgrapht-treevisualize-2019.4.11.zip) (Weka >= 3.7.11)
 
 ## How to use packages
 
