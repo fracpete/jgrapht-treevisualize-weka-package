@@ -14,52 +14,27 @@
  */
 
 /*
- * SimpleVertex.java
+ * SimpleVertexAttributeProvider.java
  * Copyright (C) 2019 University of Waikato, Hamilton, NZ
  */
 
 package weka.gui.visualize.plugins.jgrapht;
 
 import org.jgrapht.io.Attribute;
+import org.jgrapht.io.ComponentAttributeProvider;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Vertex class.
+ * SimpleVertex attribute provider.
+ *
+ * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class SimpleVertex
-  implements Serializable {
-
-  private static final long serialVersionUID = -5274928994354192155L;
-
-  protected String m_ID;
-
-  protected Map<String, Attribute> m_Attributes;
-
-  public SimpleVertex(String id, Map<String, Attribute> attributes) {
-    super();
-    m_ID = id;
-    m_Attributes = attributes;
-  }
-
-  public String getID() {
-    return m_ID;
-  }
-
-  public Map<String, Attribute> getAttributes() {
-    return m_Attributes;
-  }
-
-  public void setAttributes(Map<String, Attribute> attributes) {
-    m_Attributes = attributes;
-  }
+public class SimpleVertexAttributeProvider
+  implements ComponentAttributeProvider<SimpleVertex>{
 
   @Override
-  public String toString() {
-    if ((m_Attributes != null) && m_Attributes.containsKey("label"))
-      return m_Attributes.get("label").toString();
-    else
-      return m_ID;
+  public Map<String, Attribute> getComponentAttributes(SimpleVertex component) {
+    return component.getAttributes();
   }
 }

@@ -49,9 +49,27 @@ public class JGraphTTreeVisualizationPlugin
     ExtensionFileFilter		filter;
 
     if (m_FileChooserDotty == null) {
-      filter             = new ExtensionFileFilter(
-	new String[]{".dotty", ".dot"},
-	"GraphViz dot file");
+      filter = new ExtensionFileFilter(new String[]{".dotty", ".dot"}, "GraphViz dot file");
+      m_FileChooserDotty = new JFileChooser();
+      m_FileChooserDotty.addChoosableFileFilter(filter);
+      m_FileChooserDotty.setFileFilter(filter);
+      m_FileChooserDotty.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      m_FileChooserDotty.setAcceptAllFileFilterUsed(false);
+    }
+
+    return m_FileChooserDotty;
+  }
+
+  /**
+   * Returns the filechooser to use for saving the GraphML graph.
+   *
+   * @return		the filechooser
+   */
+  protected JFileChooser getFileChooserGraphML() {
+    ExtensionFileFilter		filter;
+
+    if (m_FileChooserDotty == null) {
+      filter = new ExtensionFileFilter(new String[]{".graphml"}, "GraphML file");
       m_FileChooserDotty = new JFileChooser();
       m_FileChooserDotty.addChoosableFileFilter(filter);
       m_FileChooserDotty.setFileFilter(filter);
@@ -93,7 +111,7 @@ public class JGraphTTreeVisualizationPlugin
     });
     result.add(menuitem);
 
-    menuitem = new JMenuItem("Save graph data...");
+    menuitem = new JMenuItem("Save as dotty...");
     menuitem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -103,7 +121,22 @@ public class JGraphTTreeVisualizationPlugin
 	  return;
 	String msg = JGraphTTreeVisualization.getSingleton().saveDotty(dotty, "" + fileChooser.getSelectedFile());
 	if (msg != null)
-	  JOptionPane.showMessageDialog(null, msg, "Error saving graph", JOptionPane.ERROR_MESSAGE);
+	  JOptionPane.showMessageDialog(null, msg, "Error saving as dotty", JOptionPane.ERROR_MESSAGE);
+      }
+    });
+    result.add(menuitem);
+
+    menuitem = new JMenuItem("Save as GraphML...");
+    menuitem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+	JFileChooser fileChooser = getFileChooserGraphML();
+	int retVal = fileChooser.showSaveDialog(null);
+	if (retVal != JFileChooser.APPROVE_OPTION)
+	  return;
+	String msg = JGraphTTreeVisualization.getSingleton().saveGraphml(dotty, "" + fileChooser.getSelectedFile());
+	if (msg != null)
+	  JOptionPane.showMessageDialog(null, msg, "Error saving as GraphML", JOptionPane.ERROR_MESSAGE);
       }
     });
     result.add(menuitem);

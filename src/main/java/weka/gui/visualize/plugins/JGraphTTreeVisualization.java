@@ -28,11 +28,18 @@ import org.jgrapht.io.ComponentUpdater;
 import org.jgrapht.io.DOTImporter;
 import org.jgrapht.io.EdgeProvider;
 import org.jgrapht.io.GraphImporter;
+import org.jgrapht.io.GraphMLExporter;
 import org.jgrapht.io.VertexProvider;
 import weka.gui.visualize.plugins.jgrapht.SimpleComponentUpdater;
 import weka.gui.visualize.plugins.jgrapht.SimpleEdge;
+import weka.gui.visualize.plugins.jgrapht.SimpleEdgeAttributeProvider;
+import weka.gui.visualize.plugins.jgrapht.SimpleEdgeIDProvider;
+import weka.gui.visualize.plugins.jgrapht.SimpleEdgeLabelProvider;
 import weka.gui.visualize.plugins.jgrapht.SimpleEdgeProvider;
 import weka.gui.visualize.plugins.jgrapht.SimpleVertex;
+import weka.gui.visualize.plugins.jgrapht.SimpleVertexAttributeProvider;
+import weka.gui.visualize.plugins.jgrapht.SimpleVertexIDProvider;
+import weka.gui.visualize.plugins.jgrapht.SimpleVertexLabelProvider;
 import weka.gui.visualize.plugins.jgrapht.SimpleVertexProvider;
 
 import javax.swing.JFrame;
@@ -41,6 +48,7 @@ import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 /**
  * Utility class.
@@ -63,13 +71,14 @@ public class JGraphTTreeVisualization {
   }
 
   /**
-   * Saves the dotty string to a file.
+   * Saves the string to a file.
    *
-   * @param dotty	the graph in dotty notation to turn into image
-   * @param filename 	the file to save the dotty data to
+   * @param type	the type of graph to save (used for messages)
+   * @param content	the graph to save
+   * @param filename 	the file to save the graph to
    * @return		null if successful, otherwise error message
    */
-  public String saveDotty(String dotty, String filename) {
+  protected String save(String type, String content, String filename) {
     String		result;
     FileWriter fwriter;
     BufferedWriter bwriter;
@@ -77,18 +86,18 @@ public class JGraphTTreeVisualization {
     result = null;
 
     if (DEBUG)
-      System.out.println("Saving dotty to: " + filename);
+      System.out.println("Saving " + type + " to: " + filename);
 
     fwriter = null;
     bwriter = null;
     try {
       fwriter = new FileWriter(filename);
       bwriter = new BufferedWriter(fwriter);
-      bwriter.write(dotty);
+      bwriter.write(content);
       bwriter.newLine();
     }
     catch (Exception e) {
-      result = "Failed to write dotty string to " + filename;
+      result = "Failed to write " + type + " string to " + filename;
       System.err.println(result);
       e.printStackTrace();
       result += "\n" + e;
@@ -118,27 +127,95 @@ public class JGraphTTreeVisualization {
   }
 
   /**
+   * Saves the dotty string to a file.
+   *
+   * @param dotty	the graph in dotty notation to turn into image
+   * @param filename 	the file to save the dotty data to
+   * @return		null if successful, otherwise error message
+   */
+  public String saveDotty(String dotty, String filename) {
+    return save("dotty", dotty, filename);
+  }
+
+  /**
+   * Converts the dotty string and saves it as graphml file.
+   *
+   * @param dotty	the graph in dotty notation to turn into graphml
+   * @param filename 	the file to save the graphml data to
+   * @return		null if successful, otherwise error message
+   */
+  public String saveGraphml(String dotty, String filename) {
+    DirectedPseudograph<SimpleVertex, SimpleEdge> 	graph;
+    GraphMLExporter<SimpleVertex, SimpleEdge>		exporter;
+    StringWriter					writer;
+
+    try {
+      writer = new StringWriter();
+      graph = importDotty(dotty);
+      exporter = new GraphMLExporter<SimpleVertex, SimpleEdge>(
+        new SimpleVertexIDProvider(),
+	new SimpleVertexLabelProvider(),
+	new SimpleVertexAttributeProvider(),
+	new SimpleEdgeIDProvider(),
+	new SimpleEdgeLabelProvider(),
+	new SimpleEdgeAttributeProvider());
+      exporter.exportGraph(graph, writer);
+      return save("graphml", writer.toString(), filename);
+    }
+    catch (Exception e) {
+      return "Failed to export dotty to GraphML: " + e;
+    }
+  }
+
+  /**
+   * Imports the dotty graph.
+   *
+   * @param dotty	the dotty string notation
+   * @return		the graph
+   * @throws Exception	if parsing fails
+   */
+  public DirectedPseudograph<SimpleVertex, SimpleEdge> importDotty(String dotty) throws Exception {
+    DirectedPseudograph<SimpleVertex, SimpleEdge> 	result;
+    VertexProvider<SimpleVertex> 			vp;
+    EdgeProvider<SimpleVertex, SimpleEdge> 		ep;
+    ComponentUpdater<SimpleVertex> 			cu;
+    GraphImporter<SimpleVertex, SimpleEdge> 		importer;
+
+    // based on:
+    // https://github.com/jgrapht/jgrapht/blob/master/jgrapht-io/src/test/java/org/jgrapht/io/DOTImporter2Test.java
+
+    result   = new DirectedPseudograph<SimpleVertex,SimpleEdge>(SimpleEdge.class);
+    vp       = new SimpleVertexProvider();
+    ep       = new SimpleEdgeProvider();
+    cu       = new SimpleComponentUpdater();
+    importer = new DOTImporter<SimpleVertex,SimpleEdge>(vp, ep, cu);
+    importer.importGraph(result, new StringReader(dotty));
+
+    return result;
+  }
+
+  /**
    * Displays the dotty graph.
    *
    * @param dotty	the graph
    * @return		null if successful, otherwise error message
    */
   public String displayGraph(String dotty) {
+    DirectedPseudograph<SimpleVertex, SimpleEdge> 	graph;
+    JGraphXAdapter<SimpleVertex, SimpleEdge> 		jgxAdapter;
+    mxGraphComponent 					component;
+    JFrame 						frame;
+    mxCompactTreeLayout 				layout;
+
+    // based on:
+    // https://github.com/jgrapht/jgrapht/blob/master/jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphXAdapterDemo.java
+
     try {
-      // based on:
-      // https://github.com/jgrapht/jgrapht/blob/master/jgrapht-io/src/test/java/org/jgrapht/io/DOTImporter2Test.java
-      VertexProvider<SimpleVertex> vp = new SimpleVertexProvider();
-      EdgeProvider<SimpleVertex, SimpleEdge> ep = new SimpleEdgeProvider();
-      ComponentUpdater<SimpleVertex> cu = new SimpleComponentUpdater();
-      GraphImporter<SimpleVertex, SimpleEdge> importer = new DOTImporter<SimpleVertex,SimpleEdge>(vp, ep, cu);
-      DirectedPseudograph<SimpleVertex, SimpleEdge> graph = new DirectedPseudograph<SimpleVertex,SimpleEdge>(SimpleEdge.class);
-      importer.importGraph(graph, new StringReader(dotty));
-      // display taken from:
-      // https://github.com/jgrapht/jgrapht/blob/master/jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphXAdapterDemo.java
-      JGraphXAdapter<SimpleVertex, SimpleEdge> jgxAdapter = new JGraphXAdapter<SimpleVertex,SimpleEdge>(graph);
+      graph = importDotty(dotty);
+      jgxAdapter = new JGraphXAdapter<SimpleVertex,SimpleEdge>(graph);
       jgxAdapter.setCellsEditable(false);
       jgxAdapter.setLabelsVisible(true);
-      mxGraphComponent component = new mxGraphComponent(jgxAdapter);
+      component = new mxGraphComponent(jgxAdapter);
       component.getConnectionHandler().setEnabled(false);
       component.setPanning(true);
       component.setConnectable(false);
@@ -146,13 +223,13 @@ public class JGraphTTreeVisualization {
       component.setDragEnabled(true);
       component.setZoomFactor(5.0);
       component.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_PAGE);
-      JFrame frame = new JFrame();
+      frame = new JFrame();
       frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       frame.getContentPane().add(component);
       frame.setSize(new Dimension(800, 800));
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
-      mxCompactTreeLayout layout = new mxCompactTreeLayout(jgxAdapter);
+      layout = new mxCompactTreeLayout(jgxAdapter);
       layout.setHorizontal(false);
       layout.execute(jgxAdapter.getDefaultParent());
       return null;
@@ -172,5 +249,4 @@ public class JGraphTTreeVisualization {
       m_Singleton = new JGraphTTreeVisualization();
     return m_Singleton;
   }
-
 }

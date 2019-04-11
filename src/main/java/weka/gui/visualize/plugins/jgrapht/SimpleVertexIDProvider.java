@@ -14,27 +14,24 @@
  */
 
 /*
- * SimpleEdgeProvider.java
+ * SimpleVertexIDProvider.java
  * Copyright (C) 2019 University of Waikato, Hamilton, NZ
  */
 
 package weka.gui.visualize.plugins.jgrapht;
 
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.EdgeProvider;
-
-import java.util.Map;
+import org.jgrapht.io.ComponentNameProvider;
 
 /**
- * The edge provider.
+ * Component name provider for SimpleEdge.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
-s */
-public class SimpleEdgeProvider implements EdgeProvider<SimpleVertex, SimpleEdge> {
+ */
+public class SimpleVertexIDProvider
+  implements ComponentNameProvider<SimpleVertex> {
 
   @Override
-  public SimpleEdge buildEdge(SimpleVertex from, SimpleVertex to, String label, Map<String, Attribute> attributes) {
-    return new SimpleEdge(from, to, label, attributes);
+  public String getName(SimpleVertex component) {
+    return component.getID();
   }
-
 }

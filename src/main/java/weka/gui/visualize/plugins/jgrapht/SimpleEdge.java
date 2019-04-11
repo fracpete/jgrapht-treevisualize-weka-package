@@ -21,6 +21,9 @@
 package weka.gui.visualize.plugins.jgrapht;
 
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.io.Attribute;
+
+import java.util.Map;
 
 /**
  * Edge class.
@@ -30,11 +33,36 @@ public class SimpleEdge
 
   private static final long serialVersionUID = -3953505380251686524L;
 
+  protected SimpleVertex m_From;
+
+  protected SimpleVertex m_To;
+
   protected String m_Label;
 
-  public SimpleEdge(String label) {
+  protected Map<String, Attribute> m_Attributes;
+
+  public SimpleEdge(SimpleVertex from, SimpleVertex to, String label, Map<String, Attribute> attributes) {
     super();
+    m_From = from;
+    m_To = to;
     m_Label = label;
+    m_Attributes = attributes;
+  }
+
+  public SimpleVertex getFrom() {
+    return m_From;
+  }
+
+  public SimpleVertex getTo() {
+    return m_To;
+  }
+
+  public String getLabel() {
+    return m_Label;
+  }
+
+  public Map<String, Attribute> getAttributes() {
+    return m_Attributes;
   }
 
   @Override
