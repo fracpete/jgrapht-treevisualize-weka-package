@@ -20,8 +20,27 @@
 
 package weka.gui.visualize.plugins;
 
+import com.mxgraph.layout.mxCompactTreeLayout;
+import com.mxgraph.swing.mxGraphComponent;
+import org.jgrapht.ext.JGraphXAdapter;
+import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.io.ComponentUpdater;
+import org.jgrapht.io.DOTImporter;
+import org.jgrapht.io.EdgeProvider;
+import org.jgrapht.io.GraphImporter;
+import org.jgrapht.io.VertexProvider;
+import weka.gui.visualize.plugins.jgrapht.SimpleComponentUpdater;
+import weka.gui.visualize.plugins.jgrapht.SimpleEdge;
+import weka.gui.visualize.plugins.jgrapht.SimpleEdgeProvider;
+import weka.gui.visualize.plugins.jgrapht.SimpleVertex;
+import weka.gui.visualize.plugins.jgrapht.SimpleVertexProvider;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.StringReader;
 
 /**
  * Utility class.
@@ -99,6 +118,51 @@ public class JGraphTTreeVisualization {
   }
 
   /**
+   * Displays the dotty graph.
+   *
+   * @param dotty	the graph
+   * @return		null if successful, otherwise error message
+   */
+  public String displayGraph(String dotty) {
+    try {
+      // based on:
+      // https://github.com/jgrapht/jgrapht/blob/master/jgrapht-io/src/test/java/org/jgrapht/io/DOTImporter2Test.java
+      VertexProvider<SimpleVertex> vp = new SimpleVertexProvider();
+      EdgeProvider<SimpleVertex, SimpleEdge> ep = new SimpleEdgeProvider();
+      ComponentUpdater<SimpleVertex> cu = new SimpleComponentUpdater();
+      GraphImporter<SimpleVertex, SimpleEdge> importer = new DOTImporter<SimpleVertex,SimpleEdge>(vp, ep, cu);
+      DirectedPseudograph<SimpleVertex, SimpleEdge> graph = new DirectedPseudograph<SimpleVertex,SimpleEdge>(SimpleEdge.class);
+      importer.importGraph(graph, new StringReader(dotty));
+      // display taken from:
+      // https://github.com/jgrapht/jgrapht/blob/master/jgrapht-demo/src/main/java/org/jgrapht/demo/JGraphXAdapterDemo.java
+      JGraphXAdapter<SimpleVertex, SimpleEdge> jgxAdapter = new JGraphXAdapter<SimpleVertex,SimpleEdge>(graph);
+      jgxAdapter.setCellsEditable(false);
+      jgxAdapter.setLabelsVisible(true);
+      mxGraphComponent component = new mxGraphComponent(jgxAdapter);
+      component.getConnectionHandler().setEnabled(false);
+      component.setPanning(true);
+      component.setConnectable(false);
+      //component.setEnabled(false);
+      component.setDragEnabled(true);
+      component.setZoomFactor(5.0);
+      component.setZoomPolicy(mxGraphComponent.ZOOM_POLICY_PAGE);
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+      frame.getContentPane().add(component);
+      frame.setSize(new Dimension(800, 800));
+      frame.setLocationRelativeTo(null);
+      frame.setVisible(true);
+      mxCompactTreeLayout layout = new mxCompactTreeLayout(jgxAdapter);
+      layout.setHorizontal(false);
+      layout.execute(jgxAdapter.getDefaultParent());
+      return null;
+    }
+    catch (Exception e) {
+      return "Failed to display graph: " + e;
+    }
+  }
+
+  /**
    * Return the singleton.
    *
    * @return		the singleton
@@ -108,4 +172,5 @@ public class JGraphTTreeVisualization {
       m_Singleton = new JGraphTTreeVisualization();
     return m_Singleton;
   }
+
 }

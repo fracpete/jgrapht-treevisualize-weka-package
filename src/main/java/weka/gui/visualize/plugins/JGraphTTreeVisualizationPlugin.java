@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 /**
  * Displays a graph in dotty format using JGraphT.
  * 
@@ -85,7 +86,9 @@ public class JGraphTTreeVisualizationPlugin
     menuitem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        // TODO
+        String msg = JGraphTTreeVisualization.getSingleton().displayGraph(dotty);
+	if (msg != null)
+	  JOptionPane.showMessageDialog(null, msg, "Error displaying graph", JOptionPane.ERROR_MESSAGE);
       }
     });
     result.add(menuitem);
