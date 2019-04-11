@@ -3,6 +3,9 @@
 TreeVisualize plugin for the Explorer using [JGraphT](https://jgrapht.org/)
 to generate the tree.
 
+In contrast to [graphviz-treevisualize](https://github.com/fracpete/graphviz-treevisualize-weka-package),
+this plugin does not rely on external tools.
+
 
 ## Releases
 
@@ -34,3 +37,21 @@ Add the following dependency in your `pom.xml` to include the package:
     </dependency>
 ```
 
+
+## Screenshots
+
+### Plugin menu
+
+![plugin menu](src/site/resources/plugin_menu.png)
+
+### Example graph
+
+J48 tree generated from UCI dataset *iris*:
+
+![graph](src/site/resources/iris.png)
+
+### GraphML export
+
+[GraphML](src/site/resources/iris.graphml) generated from the original [dotty](src/site/resources/iris.dot):
+
+![graphml](src/site/resources/iris_graphml.png)

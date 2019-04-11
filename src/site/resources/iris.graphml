@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><graphml xmlns="http://graphml.graphdrawing.org/xmlns" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<key id="vertex_label_key" for="node" attr.name="VertexLabel" attr.type="string"/>
+<key id="edge_label_key" for="edge" attr.name="EdgeLabel" attr.type="string"/>
+<graph edgedefault="directed">
+<node id="N0">
+<data key="vertex_label_key">petalwidth</data>
+</node>
+<node id="N1">
+<data key="vertex_label_key">Iris-setosa (50.0)</data>
+</node>
+<node id="N2">
+<data key="vertex_label_key">petalwidth</data>
+</node>
+<node id="N3">
+<data key="vertex_label_key">petallength</data>
+</node>
+<node id="N4">
+<data key="vertex_label_key">Iris-versicolor (48.0/1.0)</data>
+</node>
+<node id="N5">
+<data key="vertex_label_key">petalwidth</data>
+</node>
+<node id="N6">
+<data key="vertex_label_key">Iris-virginica (3.0)</data>
+</node>
+<node id="N7">
+<data key="vertex_label_key">Iris-versicolor (3.0/1.0)</data>
+</node>
+<node id="N8">
+<data key="vertex_label_key">Iris-virginica (46.0/1.0)</data>
+</node>
+<edge id="1" source="N0" target="N1">
+<data key="edge_label_key">&lt;= 0.6</data>
+</edge>
+<edge id="2" source="N0" target="N2">
+<data key="edge_label_key">&gt; 0.6</data>
+</edge>
+<edge id="3" source="N2" target="N3">
+<data key="edge_label_key">&lt;= 1.7</data>
+</edge>
+<edge id="4" source="N3" target="N4">
+<data key="edge_label_key">&lt;= 4.9</data>
+</edge>
+<edge id="5" source="N3" target="N5">
+<data key="edge_label_key">&gt; 4.9</data>
+</edge>
+<edge id="6" source="N5" target="N6">
+<data key="edge_label_key">&lt;= 1.5</data>
+</edge>
+<edge id="7" source="N5" target="N7">
+<data key="edge_label_key">&gt; 1.5</data>
+</edge>
+<edge id="8" source="N2" target="N8">
+<data key="edge_label_key">&gt; 1.7</data>
+</edge>
+</graph>
+</graphml>
+
