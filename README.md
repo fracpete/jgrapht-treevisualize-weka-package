@@ -1,6 +1,6 @@
 # jgrapht-treevisualize-weka-package
 
-TreeVisualize plugin for the Explorer using JGraphT ()
+TreeVisualize plugin for the Explorer using [JGraphT](https://jgrapht.org/)
 to generate the tree.
 
 
