@@ -4,7 +4,7 @@ TreeVisualize plugin for the Explorer using [JGraphT](https://jgrapht.org/)
 to generate the tree.
 
 In contrast to [graphviz-treevisualize](https://github.com/fracpete/graphviz-treevisualize-weka-package),
-this plugin does not rely on external tools.
+this plugin does not rely on external tools and allows export to [GraphML](https://en.wikipedia.org/wiki/GraphML).
 
 
 ## Releases
