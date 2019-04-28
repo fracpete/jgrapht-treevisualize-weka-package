@@ -7,7 +7,7 @@ Preparation
 * Change the artifact ID in `pom.xml` to today's date, e.g.:
 
   ```
-2019.4.11-SNAPSHOT
+  2019.4.11-SNAPSHOT
   ```
 
 * Update the version, date and URL in `Description.props` to reflect new
@@ -27,7 +27,7 @@ Weka package
 * Run the following command to generate the package archive for version `2019.4.11`:
 
   ```
-  ant -f build_package.xml -Dpackage=graphviz-treevisualize-2019.4.11 clean make_package
+  ant -f build_package.xml -Dpackage=jgrapht-treevisualize-2019.4.11 clean make_package
   ```
 
 * Create a release tag on github (v2019.4.11)
