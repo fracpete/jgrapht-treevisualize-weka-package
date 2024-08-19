@@ -9,7 +9,8 @@ this plugin does not rely on external tools and allows export to [GraphML](https
 
 ## Releases
 
-* [2019.4.11](https://github.com/fracpete/jgrapht-treevisualize-weka-package/releases/download/v2019.4.11/graphviz-treevisualize-2019.4.11.zip) (Weka >= 3.7.11)
+* [2024.8.19](https://github.com/fracpete/jgrapht-treevisualize-weka-package/releases/download/v2024.8.19/jgrapht-treevisualize-2024.8.19.zip) (Weka >= 3.7.11)
+* [2019.4.11](https://github.com/fracpete/jgrapht-treevisualize-weka-package/releases/download/v2019.4.11/jgrapht-treevisualize-2019.4.11.zip) (Weka >= 3.7.11)
 
 ## How to use packages
 
@@ -26,7 +27,7 @@ Add the following dependency in your `pom.xml` to include the package:
     <dependency>
       <groupId>com.github.fracpete</groupId>
       <artifactId>jgrapht-treevisualize-weka-package</artifactId>
-      <version>2019.4.11</version>
+      <version>2024.8.19</version>
       <type>jar</type>
       <exclusions>
         <exclusion>
