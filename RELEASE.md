@@ -52,3 +52,8 @@ Maven
   git push
   ````
 
+README
+------
+
+* add download link to [Releases section](README.md#releases)
+* update the Maven artifact version in [Maven section](RELEASE.md#maven)
